@@ -16,20 +16,20 @@ __author__ = 'Sencer HAMARAT'
 
 def path_finder(filen, foldern=None, root_path=None):
     """
-    filen:      Oluşturulacak dosya
-    foldern:    Belirtilmişse oluşturulacak dosya bu alt klasör oluşturulup, alt klasörün altına oluşturulur.
-    root_path:  Belirtilmemişse öntanımlı olarak Settings.PROJECT_ROOT kullanılır.
-    full_path:  Dosyanın nihai yolunu belirtir.
+    filen:      Fale name
+    foldern:    Subfolder name
+    root_path:  Default Settings.PROJECT_ROOT
+    full_path:  full file path
     """
     full_path = None
     try:
-        if root_path is None:       # Elle root path verilmemişse öntanımlı olarak Settings.PROJECT_ROOT kullanılır.
+        if root_path is None:
             root_path = Settings.PROJECT_ROOT
 
-        if foldern is None:         # Alt klasör belirtilmemişse dosyayı buraya oluşturur.
+        if foldern is None:
             full_path = '{root_path}/{filen}'.format(root_path=root_path, filen=filen)
-        else:                       # Alt klasör belirtilmişse klasör oluşturup dosyayı alt klasör içine oluşturur.
-            if not Tools().check_foldr(foldern):  # Klasörün var olup olmadığını kontrol eder, yoksa oluşturur.
+        else:
+            if not Tools().check_foldr(foldern):
                 Tools().create_foldr(foldern)
             full_path = '{root_path}/{foldern}/{filen}'.format(root_path=root_path, foldern=foldern, filen=filen)
     except Exception as e:
@@ -41,7 +41,7 @@ def path_finder(filen, foldern=None, root_path=None):
 class FetchCaptcha(threading.Thread):
     def __init__(self, parent):
         """
-        Captcha resmini siteden çekip dosyaya yazar ve dosyadan okuyup ekrana basar.
+        Read captcha from url and write into file
         """
         super(FetchCaptcha, self).__init__()
         self._stop = threading.Event()
@@ -69,9 +69,9 @@ class FetchCaptcha(threading.Thread):
         """
         Captcha dosyası üzerinde işlem yapmaya yarar;
 
-        Eğer işlem 'd' ya da 'r' DEĞİLSE ise gönderilen binary'i captcha dosyasına yazar ('w' yerine).
-        'd' : Eğer işlem 'd' ise captcha dosyasını dosya sisteminden siler.
-        'r' : Eğer işlem 'r' ise captcha dosyasını okuyup ekrana basar.
+        If operation not 'd' or 'r', file mode will be "wb"
+        'd' : Delete file from file system
+        'r' : Read file
         """
         if operation == 'd':
             try:
@@ -97,7 +97,7 @@ class FetchCaptcha(threading.Thread):
 
     def _fetch_captcha(self):
         """
-        Login ekranındaki captcha dosyasını çekip dosyaya yazar.
+        Read captcha from url.
         """
         try:
             self._check_file(self.captcha_fetcher_method_from_outer_class())
@@ -107,7 +107,7 @@ class FetchCaptcha(threading.Thread):
 
     def run(self):
         """
-        Event tarafından çalıştırılan method. (Event tetiklendiğinde Class içinde ilk çalışan methoddur)
+        Event method.
         """
         self.parent.stat_gauge.Pulse()
         try:
