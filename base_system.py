@@ -16,7 +16,7 @@ _debug = True
 
 class Settings():
     """
-    Projenin bazı gömülü ayarları burada tutulur.
+    Embedded settings.
     """
     DEBUG = True if _debug else False
     if hasattr(sys, 'frozen'):
@@ -38,11 +38,11 @@ def log_file_name(dosya):
 class Logger:
     def __init__(self, log_name, level='INFO', log_dir='logs', log_format=None, handler=None):
         """
-        log_name: log file name
-        level: log levels: CRITICAL, ERROR, WARNING, INFO, DEBUG
-        log_dir: log folder. default <project_folder>/logs/
+        log_name:   log file name
+        level:      log levels: CRITICAL, ERROR, WARNING, INFO, DEBUG
+        log_dir:    log folder. default <project_folder>/logs/
         log_format: logging format
-        handler: TODO
+        handler:    TODO (incomplete)
         """
         self.log_name = log_name
         self.loger = None
@@ -89,9 +89,9 @@ log = Logger('ttfo-%s' % day).create_logger()
 class Tools():
     """
     Class of Some base tools
-    create_foldr: Creates folder in project base
+    create_foldr:   Creates folder in project base
     control_folder: Checks folder in project base
-    moneyfmt: Formatting money string
+    moneyfmt:       Formatting money string
     """
 
     def __init__(self):
@@ -121,6 +121,7 @@ class Tools():
     def moneyfmt(value, places=2, curr='', sep='.', dp=',', pos='', neg='-', trailneg=''):
         """
         Convert Decimal to a money formatted string.
+        https://docs.python.org/3.0/library/decimal.html
 
         places:  required number of places after the decimal point
         curr:    optional currency symbol before the sign (may be blank)
