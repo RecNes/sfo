@@ -67,7 +67,7 @@ class FetchCaptcha(threading.Thread):
 
     def _check_file(self, operation):
         """
-        Captcha dosyası üzerinde işlem yapmaya yarar;
+        Does file operations
 
         If operation not 'd' or 'r', file mode will be "wb"
         'd' : Delete file from file system
@@ -207,7 +207,7 @@ class APISignIn(threading.Thread):
         if self.parent.captcha_text.GetValue():
             self.captcha_text = self.parent.captcha_text.GetValue()
         else:
-            raise Exception(u"\r\n> WARNING: Resimde görünen kod, yandaki alana yazılmadan işleme başlanamaz.")
+            raise Exception(u"\r\n> WARNING: Catpcha code required")
 
     def __sing_in(self):
         """
@@ -215,15 +215,15 @@ class APISignIn(threading.Thread):
         """
         try:
             self.parent.sign_in_button.Disable()
-            self.parent.info_flow.AppendText(u"\r\n- TTS Oturum açma işlemine başlandı...")
+            self.parent.info_flow.AppendText(u"\r\n- Starting to Sign In...")
             self.__get_captcha_text()
             bilgiler = (self.parent.user_name.GetValue(), self.parent.user_pass.GetValue(),
                         self.parent.user_code.GetValue(), self.parent.captcha_text.GetValue())
             self.parent.is_session_alive = self.sign_in_method_from_outer_class(bilgiler=bilgiler)
 
             if not self.parent.is_session_alive:
-                raise Exception(u"\r\n- Oturum açılırken hata oluştu. Lütfen 'Resim Al' "
-                                u"butonu ile çalıştırma adımlarını tekrarlayınız.")
+                raise Exception(u"\r\n- Error while Signing In. Please press 'Fetch Captcha' "
+                                u"button to restart.")
 
             balance = str(self.service_balance_fetcher_method_from_outer_class())
             if balance is not None:
@@ -236,7 +236,7 @@ class APISignIn(threading.Thread):
             self.parent.sign_in_button.SetLabel(u"Sign Out")
             self.parent.sign_in_button.Enable()
             self.parent.start_button.Enable()
-            self.log.info(u'Oturum açılıdı...')
+            self.log.info(u'Signed In...')
         except Exception as e:
             self.parent.sign_in_button.Disable()
             self.parent.fetch_captcha_button.Enable()
@@ -332,8 +332,8 @@ class FaturaOde(threading.Thread):
         self.parent.process_started = False
         self._stop.set()
         if self.parent.ongoing_task:
-            self.parent.info_flow.AppendText(u"\r\n- İşlemde fatura var, İşlem bitince Otomatik olarak durulacak.")
-            self.parent.info_flow.AppendText(u"\r\n> DİKKAT: İşlem bitinceye kadar programı KAPATMAYIN.")
+            self.parent.info_flow.AppendText(u"\r\n- Ongoing process exists, Automatically stops when process done.")
+            self.parent.info_flow.AppendText(u"\r\n> Warning: Do not close application before process done.")
         self.parent.ongoing_task = False
         self.parent.stop_process_button.Disable()
         self.parent.start_button.Enable()
@@ -416,7 +416,7 @@ class FaturaOde(threading.Thread):
 
     def __display(self):
         """
-        Servisten gelen fatura bilgilerini ekrana basar.
+        Displays data.
         """
         if isinstance(self.service_query['Field 1'], str):
             self.service_query.update({'Field 1': self.__force_decode(self.service_query['Field 1'])})
