@@ -67,7 +67,7 @@ class MainProcessFrame(MainFrame):                                      # Constr
         grs_trd.start()
 
 
-class FaturaApp(wx.App):
+class App(wx.App):
     def OnInit(self):
         """
         Some Docstrings was here. Removed because of some cases.
@@ -84,5 +84,5 @@ class FaturaApp(wx.App):
 
 # Mandatory in wx, create an app, False stands for not deteriction stdin/stdout refer manual for details
 if __name__ == '__main__':
-    app = FaturaApp()
+    app = App()
     app.MainLoop()                  # start the applications
